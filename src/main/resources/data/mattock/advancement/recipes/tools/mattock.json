@@ -1,0 +1,25 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_obisidian": {
+      "trigger": "minecraft:inventory_changed",
+      "conditions": {
+        "items": [
+          {
+            "items": "minecraft:obsidian"
+          }
+        ]
+      }
+    }
+  },
+  "requirements": [
+    [
+      "has_obisidian"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "mattock:mattock"
+    ]
+  }
+}

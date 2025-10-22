@@ -1,0 +1,14 @@
+{
+	"required": true,
+	"package": "astrazoey.mattock.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+      "MattockMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	},
+	"overwrites": {
+		"requireAnnotations": true
+	}
+}

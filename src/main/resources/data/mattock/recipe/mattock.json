@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "###",
+    " /#",
+    " / "
+  ],
+  "key": {
+    "#": "minecraft:obsidian",
+    "/": "minecraft:stick"
+  },
+  "result": {
+    "id": "mattock:mattock",
+    "count": 1
+  }
+}
