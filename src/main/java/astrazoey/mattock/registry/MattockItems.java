@@ -2,23 +2,23 @@ package astrazoey.mattock.registry;
 
 import astrazoey.mattock.Mattock;
 import net.fabricmc.api.ModInitializer;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
-import net.minecraft.item.ToolMaterial;
-import net.minecraft.registry.Registries;
-import net.minecraft.registry.Registry;
-import net.minecraft.registry.RegistryKey;
-import net.minecraft.registry.RegistryKeys;
-import net.minecraft.registry.tag.BlockTags;
-import net.minecraft.registry.tag.TagKey;
-import net.minecraft.util.Identifier;
+import net.fabricmc.fabric.api.creativetab.v1.CreativeModeTabEvents;
+import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceKey;
+import net.minecraft.resources.Identifier;
+import net.minecraft.tags.BlockTags;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.CreativeModeTabs;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ToolMaterial;
+import net.minecraft.world.level.block.Block;
 import java.util.function.Function;
 
 public class MattockItems implements ModInitializer {
 
-    public static final TagKey<Item> REPAIRS_MATTOCK = TagKey.of(Registries.ITEM.getKey(), Identifier.of("minecraft", "obsidian"));
+    public static final TagKey<Item> REPAIRS_MATTOCK = TagKey.create(BuiltInRegistries.ITEM.key(), Identifier.fromNamespaceAndPath("minecraft", "obsidian"));
 
     public static final ToolMaterial MATTOCK_MATERIAL = new ToolMaterial(
             BlockTags.AIR, // incorrect blocks for drops
@@ -29,22 +29,22 @@ public class MattockItems implements ModInitializer {
             REPAIRS_MATTOCK //repair item
     );
 
-    public static Item register(String name, Function<Item.Settings, Item> itemFactory,Item.Settings settings) {
-        RegistryKey<Item> itemKey = RegistryKey.of(RegistryKeys.ITEM, Identifier.of(Mattock.MOD_ID, name));
+    public static Item register(String name, Function<Item.Properties, Item> itemFactory,Item.Properties settings) {
+        ResourceKey<Item> itemKey = ResourceKey.create(Registries.ITEM, Identifier.fromNamespaceAndPath(Mattock.MOD_ID, name));
 
-        Item item = itemFactory.apply(settings.registryKey(itemKey));
+        Item item = itemFactory.apply(settings.setId(itemKey));
 
-        Registry.register(Registries.ITEM, itemKey, item);
+        Registry.register(BuiltInRegistries.ITEM, itemKey, item);
 
         return item;
     }
 
-    public static TagKey<Block> MATTOCK_MINEABLE = TagKey.of(RegistryKeys.BLOCK, Identifier.of("mattock", "mineable/all"));
+    public static TagKey<Block> MATTOCK_MINEABLE = TagKey.create(Registries.BLOCK, Identifier.fromNamespaceAndPath("mattock", "mineable/all"));
 
     public static final Item MATTOCK = register(
             "mattock",
             Item::new,
-            new Item.Settings().tool(
+            new Item.Properties().tool(
                     MATTOCK_MATERIAL, // material
                     MATTOCK_MINEABLE,
                     5.0f, // damage
@@ -57,8 +57,8 @@ public class MattockItems implements ModInitializer {
     // Calling a method on a class statically initializes it, meaning all static fields are evaluated
     // that's why this can be empty
     public static void initialize() {
-        ItemGroupEvents.modifyEntriesEvent(ItemGroups.TOOLS)
-                .register((itemGroup) -> itemGroup.add(MattockItems.MATTOCK));
+        CreativeModeTabEvents.modifyOutputEvent(CreativeModeTabs.TOOLS_AND_UTILITIES)
+                .register(entries -> entries.accept(MattockItems.MATTOCK));
     }
 
 

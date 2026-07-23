@@ -1,24 +1,23 @@
 package astrazoey.mattock.mixin;
 
 import astrazoey.mattock.registry.MattockItems;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(PlayerEntity.class)
+@Mixin(Player.class)
 public class MattockMixin {
 
-    @Redirect(method = "getBlockBreakingSpeed", at = @At(value = "INVOKE", target ="Lnet/minecraft/item/ItemStack;getMiningSpeedMultiplier(Lnet/minecraft/block/BlockState;)F"))
+    @Redirect(method = "getDestroySpeed", at = @At(value = "INVOKE", target ="Lnet/minecraft/world/item/ItemStack;getDestroySpeed(Lnet/minecraft/world/level/block/state/BlockState;)F"))
     public float constantMiningSpeed(ItemStack instance, BlockState state) {
 
-        float speed = instance.getMiningSpeedMultiplier(state);
-        float hardness = state.getHardness(null, null);
+        float speed = instance.getDestroySpeed(state);
+        float hardness = state.getDestroySpeed(null, null);
 
-        if(instance.isOf(MattockItems.MATTOCK)) {
+        if(instance.is(MattockItems.MATTOCK)) {
             float minMiningSpeed = 4.0f;
             float weakBlockHardness = 3.0f;
             float regularSpeedModifier = 2.0f;
